@@ -1,0 +1,33 @@
+{% extends 'forms.html' %}
+
+{% block title %} Sign Up {% endblock %}
+
+{% block body %}
+
+<!--Sign Up section-->
+<section class="base" id="base-signup">
+    <div class="base-content">
+        <div class="form">
+            <h3>
+                Sign Up to AutoCart
+            </h3>
+
+            <hr class="first">
+            <form method="POST">
+                {{ form.hidden_tag() }} <!--for csrf token-->
+
+                <div class="email"><h4>Enter Email Address</h4>{{ form.email }}<hr></div>
+                <div class="name"><h4>Enter Username</h4>{{ form.username }}<hr></div>
+                <div class="password"><h4>Enter Password</h4>{{ form.password1 }}<hr></div>
+                <div class="password"><h4>Confirm Password</h4>{{ form.password2 }}<hr></div>
+                
+                <div class="buttons">
+                    <a href="/login">Login</a>
+                    {{ form.submit() }}
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
