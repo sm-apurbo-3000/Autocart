@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %} Wishlist {% endblock %}
+
+
+{% block body %}
+
+<div class="container my-5">
+    <div class="row">
+        {% if wished_items %}
+
+        <h1 class="text-center mb-5" style="color: white;">Your AutoCart Wishlist</h1>
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="card-body">
+
+                    {% for item in wished_items %}
+
+                    <div class="row">
+                        <div class="col-sm-3 text-center align-self-center">
+                            <img src="{{ item.product.product_picture }}" alt="" class="img-fluid img-thumbnail shadow-sm" height="auto" width="auto">
+                        </div>
+                        <div class="col-sm-9">
+                            <div>
+                                <h3>{{ item.product.product_name }}</h3>
+                                <div class="my-3">
+                                    
+                                    <p class="mb-0"><span><strike><strong>BDT {{ item.product.previous_price }}</strong></strike></span></p>
+
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    
+                                    <p class="mb-0"><span><strong>BDT {{ item.product.current_price }}</strong></span></p>
+                                    <a href="/add-to-cart/{{ item.product.id }}" class="add-to-cart btn btn-sm btn-secondary mr-3 " pid="{{ item.product.id }}">Add to Cart</a>
+                                    <a href="/remove-from-wishlist/{{ item.product.id }}" class="remove-cart btn btn-sm btn-secondary mr-3 " pid="{{item.product.id}}">Remove</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+
+
+        {% else %}
+
+        <h1 class="text-center mb-5" style="color: white;">Your Wishlist is Empty</h1>
+
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

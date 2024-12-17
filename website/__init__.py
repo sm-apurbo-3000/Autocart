@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 
@@ -15,6 +15,10 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
 
     db.init_app(app)
+
+    @app.errorhandler(404)
+    def page_not_found(error):
+        return render_template('404.html')
 
     login_manager = LoginManager() # for session management
     login_manager.init_app(app)
@@ -33,6 +37,7 @@ def create_app():
     app.register_blueprint(auth, url_prefix = '/') # localhost:5000/auth/change-password
     app.register_blueprint(admin, url_prefix = '/')
 
+    #
     #with app.app_context():
     #   create_database()
 

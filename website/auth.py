@@ -53,6 +53,7 @@ def login():
             
             if customer.verify_password(password = password): #returns Boolean
                 login_user(customer)
+                flash(f'Welcome to AutoCart, {customer.username}')
                 return redirect('/') # redirect ot homepage
             else:
                 flash('Incorrect Credentials')
@@ -67,6 +68,7 @@ def login():
 @login_required
 def log_out():
     logout_user()
+    flash('Logged out successfully!')
     return redirect('/') # redirect ot homepage
 
 
