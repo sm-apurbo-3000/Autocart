@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, FloatField, PasswordField, EmailField, BooleanField, SubmitField
+from wtforms import StringField, IntegerField, FloatField, PasswordField, EmailField, BooleanField, SubmitField, SelectField
 from wtforms.validators import DataRequired, length, NumberRange
 from flask_wtf.file import FileField, FileRequired
 
@@ -23,6 +23,7 @@ class PasswordChangeForm(FlaskForm):
 
 class ShopItemsForm(FlaskForm):
     product_name = StringField('Name of Product', validators=[DataRequired()])
+    product_details = StringField('Product Details',validators=[DataRequired()])
     current_price = FloatField('Current Price', validators=[DataRequired()])
     previous_price = StringField('Previous Price', validators=[DataRequired()])
     in_stock = IntegerField('In Stock', validators=[DataRequired(), NumberRange(min=0)])
@@ -31,3 +32,10 @@ class ShopItemsForm(FlaskForm):
 
     add_product = SubmitField('Add Product')
     update_product = SubmitField('Update Product')
+
+class OrderUpdateForm(FlaskForm):
+    order_status = SelectField('Order Status', choices = [('Pending', 'Pending'), ('Accepted', 'Accepted'),
+                                                        ('Out for delivery', 'Out for delivery'),
+                                                        ('Delivered', 'Delivered'), ('Canceled', 'Canceled')])
+
+    update = SubmitField('Update Order Status')

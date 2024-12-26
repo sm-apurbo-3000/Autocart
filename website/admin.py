@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, flash, send_from_directory, redirect
 from flask_login import login_required, current_user
-from .forms import ShopItemsForm
+from .forms import ShopItemsForm, OrderUpdateForm
 from werkzeug.utils import secure_filename
-from .models import Product
+from .models import Product, Wishlist, Order, Customer
 from . import db
 
 admin_id=[1]
@@ -17,6 +17,7 @@ def add_new_car():
         if form.validate_on_submit():
             # retriving data from form
             product_name = form.product_name.data
+            product_details = form.product_details.data
             current_price = form.current_price.data
             previous_price = form.previous_price.data
             in_stock = form.in_stock.data
@@ -30,6 +31,7 @@ def add_new_car():
             # creating new car obj
             new_car = Product()
             new_car.product_name = product_name
+            new_car.product_details = product_details
             new_car.current_price = current_price
             new_car.previous_price = previous_price
             new_car.in_stock = in_stock
@@ -117,6 +119,11 @@ def remove_product(item_id):
     if current_user.id in admin_id:
         try:
             target = Product.query.get(item_id)
+            target_exists = Wishlist.query.filter_by(product_id=item_id).all()
+            
+            for item in target_exists:
+                db.session.delete(item)
+            
             db.session.delete(target)
             db.session.commit()
             flash(f'{target.product_name} has been removed successfully!')
@@ -128,4 +135,52 @@ def remove_product(item_id):
 
         return redirect('/show-added-cars')
 
+    return render_template('404.html')
+
+@admin.route('/view-orders')
+@login_required
+def view_orders():
+    if current_user.id in admin_id:
+        orders = Order.query.all()
+        return render_template('view_orders.html', orders = orders)
+    return render_template('404.html')
+
+
+@admin.route('/update-order-status/<int:order_id>', methods = ['GET', 'POST'])
+@login_required
+def update_order_status(order_id):
+    if current_user.id in admin_id:
+        form = OrderUpdateForm()
+        order = Order.query.get(order_id)
+
+        if form.validate_on_submit():
+            status = form.order_status.data
+            order.status = status
+
+            try:
+                db.session.commit()
+                flash(f'Order {order_id} Updated successfully')
+                return redirect('/view-orders')
+            except Exception as e:
+                print(e)
+                flash(f'Order {order_id} Update Failed!')
+                return redirect('/view-orders')
+
+        return render_template('update_order_status.html', form=form)
+
+    return render_template('404.html')
+
+@admin.route('/customers')
+@login_required
+def display_customers():
+    if current_user.id in admin_id:
+        customers = Customer.query.all()
+        return render_template('customers.html', customers=customers)
+    return render_template('404.html')
+
+@admin.route('/admin-page')
+@login_required
+def admin_page():
+    if current_user.id in admin_id:
+        return render_template('admin.html')
     return render_template('404.html')
