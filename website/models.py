@@ -14,6 +14,7 @@ class Customer(db.Model, UserMixin):
 
     cart_items = db.relationship('Cart', backref = db.backref('customer', lazy = True)) # lazy => True: SQLAlchemy will load related data form DB
     orders = db.relationship('Order', backref = db.backref('customer', lazy = True))
+    wishlist_items = db.relationship('Wishlist', backref = db.backref('customer', lazy = True))
 
     @property
     def password(self):
@@ -33,6 +34,7 @@ class Customer(db.Model, UserMixin):
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     product_name = db.Column(db.String(100), nullable = False)
+    product_details = db.Column(db.String(500), nullable=False)
     current_price = db.Column(db.Float, nullable = False)
     previous_price = db.Column(db.Float, nullable = False)
     in_stock = db.Column(db.Integer, nullable = False)
@@ -40,8 +42,10 @@ class Product(db.Model):
     flash_sale = db.Column(db.Boolean, default = False)
     date_added = db.Column(db.DateTime, default = datetime.utcnow)
 
+
     carts = db.relationship('Cart', backref = db.backref('product', lazy = True))
     orders = db.relationship('Order', backref = db.backref('product', lazy = True))
+    wishlist_items = db.relationship('Wishlist', backref = db.backref('product', lazy = True))
 
     def __str__(self):
         return '<Product %r>' % self.product_name
@@ -74,3 +78,15 @@ class Order(db.Model):
 
     def __str__(self):
         return '<Order %r>' % self.id
+
+class Wishlist(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)  # Assuming product_id exists in a Product model
+    date_added = db.Column(db.DateTime(), default=datetime.utcnow)
+
+    #wishlist_item_one.customer.customer_attr
+    #wishlist_item_one.product.product_attr
+
+    def __str__(self):
+        return '<Wishlist %r>' % self.id

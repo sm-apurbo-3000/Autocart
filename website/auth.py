@@ -3,6 +3,7 @@ from .forms import LoginForm, SignUpForm, PasswordChangeForm
 from .models import Customer
 from . import db
 from flask_login import login_user, login_required, logout_user
+from .admin import admin_id
 
 auth = Blueprint('auth', __name__)
 
@@ -52,8 +53,15 @@ def login():
         if customer: # if customer exists in db
             
             if customer.verify_password(password = password): #returns Boolean
-                login_user(customer)
-                return redirect('/') # redirect ot homepage
+                if customer.id in admin_id:
+                    login_user(customer)
+                    flash(f'Welcome to AutoCart Admin Panel, {customer.username}')
+                    return redirect('/admin-page') # redirect ot admin page
+                
+                else:
+                    login_user(customer)
+                    flash(f'Welcome to AutoCart, {customer.username}')
+                    return redirect('/') # redirect ot homepage
             else:
                 flash('Incorrect Credentials')
 
@@ -67,6 +75,8 @@ def login():
 @login_required
 def log_out():
     logout_user()
+    flash('Logged out successfully!')
+
     return redirect('/') # redirect ot homepage
 
 
