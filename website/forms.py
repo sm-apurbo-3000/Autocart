@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, FloatField, PasswordField, EmailField, BooleanField, SubmitField, SelectField
+from wtforms import StringField, IntegerField, FloatField, PasswordField, EmailField, BooleanField, SubmitField, SelectField, TextAreaField
 from wtforms.validators import DataRequired, length, NumberRange
 from flask_wtf.file import FileField, FileRequired
 
@@ -23,12 +23,13 @@ class PasswordChangeForm(FlaskForm):
 
 class ShopItemsForm(FlaskForm):
     product_name = StringField('Name of Product', validators=[DataRequired()])
-    product_details = StringField('Product Details',validators=[DataRequired()])
+    product_details = TextAreaField('Product Details', validators=[DataRequired()])
     current_price = FloatField('Current Price', validators=[DataRequired()])
-    previous_price = StringField('Previous Price', validators=[DataRequired()])
+    previous_price = FloatField('Previous Price', validators=[DataRequired()])
     in_stock = IntegerField('In Stock', validators=[DataRequired(), NumberRange(min=0)])
     product_picture = FileField('Product Picture', validators=[FileRequired()])
     flash_sale = BooleanField('Flash Sale')
+    add_product = SubmitField('Add Product')
 
     add_product = SubmitField('Add Product')
     update_product = SubmitField('Update Product')

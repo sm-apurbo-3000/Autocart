@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %} Product Details {% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="{{'.'+ data['product_picture']}}" alt="Product Image" style="width:auto; height:auto; border-radius: 10px;">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">{{ data['product_name'] }}</h5>
+                    <p class="card-text"><strong>Details:</strong> {{ data['product_details'] }}</p>
+                    <p class="card-text"><strong>Current Price:</strong> BDT {{ data['current_price'] }}</p>
+                    <p class="card-text"><strong>Previous Price:</strong> BDT {{ data['previous_price'] }}</p>
+                    <p class="card-text"><strong>In Stock:</strong> {{ data['in_stock'] }}</p>
+                    <p class="card-text"><small class="text-muted">Added on {{ data['date_added'] }}</small></p>
+                    <div class="d-flex justify-content-start mt-3">
+                        <form action="/add-to-cart/{{ data['product_id'] }}" method="POST" class="me-2">
+                            <button type="submit" class="btn btn-primary">Add to Cart</button>
+                        </form>
+                        <form action="/add-to-wishlist/{{ data['product_id'] }}" method="POST">
+                            <button type="submit" class="btn btn-secondary">Add to Wishlist</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

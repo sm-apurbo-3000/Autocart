@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash, send_from_directory, redirect
+from flask import Blueprint, render_template, flash, send_from_directory, redirect, url_for
 from flask_login import login_required, current_user
 from .forms import ShopItemsForm, OrderUpdateForm
 from werkzeug.utils import secure_filename
@@ -8,14 +8,14 @@ from . import db
 admin_id=[1]
 admin = Blueprint('admin', __name__)
 
-@admin.route('/add-new-car', methods=['GET','POST'])
+@admin.route('/add-new-car', methods=['GET', 'POST'])
 @login_required
 def add_new_car():
-    if current_user.id in admin_id: # checks if admin or not by uid
+    if current_user.id in admin_id:  # checks if admin or not by uid
         form = ShopItemsForm()
         
         if form.validate_on_submit():
-            # retriving data from form
+            # retrieving data from form
             product_name = form.product_name.data
             product_details = form.product_details.data
             current_price = form.current_price.data
@@ -24,32 +24,32 @@ def add_new_car():
             flash_sale = form.flash_sale.data
 
             file = form.product_picture.data
-            file_name = secure_filename(file.filename) # toyota corolla.jpeg => toyota_corolla.jpeg
+            file_name = secure_filename(file.filename)  # toyota corolla.jpeg => toyota_corolla.jpeg
             file_path = f'./media/{file_name}'
             file.save(file_path)
 
             # creating new car obj
-            new_car = Product()
-            new_car.product_name = product_name
-            new_car.product_details = product_details
-            new_car.current_price = current_price
-            new_car.previous_price = previous_price
-            new_car.in_stock = in_stock
-            new_car.flash_sale = flash_sale
-            new_car.product_picture = file_path
+            new_car = Product(
+                product_name=product_name,
+                product_details=product_details,
+                current_price=current_price,
+                previous_price=previous_price,
+                in_stock=in_stock,
+                flash_sale=flash_sale,
+                product_picture=file_path
+            )
 
             try:
                 db.session.add(new_car)
                 db.session.commit()
-                flash(f'{product_name} has been added successfully and up for sale!')
-                render_template('add-new-car.html', form = form)
+                flash(f'{product_name} has been added successfully and up for sale!', 'success')
+                return redirect(url_for('admin.add_new_car'))
             
             except Exception as e:
                 print(e)
-                flash(f'{product_name} has not been added for sale!')
+                flash(f'{product_name} has not been added for sale!', 'danger')
 
-
-        return render_template('add-new-car.html', form = form)
+        return render_template('add-new-car.html', form=form)
 
     return render_template('404.html')
 
@@ -182,5 +182,5 @@ def display_customers():
 @login_required
 def admin_page():
     if current_user.id in admin_id:
-        return render_template('admin.html')
+        return render_template('admin.html', admin_id = current_user.id)
     return render_template('404.html')
