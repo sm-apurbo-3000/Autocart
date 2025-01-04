@@ -8,49 +8,25 @@
 <div class="container text-center">
     <div class="row" style="margin: 10px;">
         <div class="col" style="margin: 3px;">
-            <div class="list-group" id="right1">
-                <a href="" class="list-group-item list-group-item-action">
-                    <i class="fa fa-car" aria-hidden="true"></i>
-                    <span class="link-name">Sedans</span>
-                </a>
-                <a href="" class="list-group-item list-group-item-action">
-                    <i class="fa fa-car" aria-hidden="true"></i>
-                    <span class="link-name">Hatchbacks</span>
-                </a>
-                <a href="" class="list-group-item list-group-item-action">
-                    <i class="fa fa-truck" aria-hidden="true"></i>
-                    <span class="link-name">SUVs</span>
-                </a>
-                <a href="" class="list-group-item list-group-item-action">
-                    <i class="fa fa-bus" aria-hidden="true"></i>
-                    <span class="link-name">Microbuses</span>
-                </a>
-                <a href="" class="list-group-item list-group-item-action">
-                    <i class="fa fa-car-battery" aria-hidden="true"></i>
-                    <span class="link-name">Electric & Hybrid</span>
-                </a>
-                <a href="" class="list-group-item list-group-item-action">
-                    <i class="fa fa-truck-pickup" aria-hidden="true"></i>
-                    <span class="link-name">Pickup Trucks</span>
-                </a>
-            </div>
+            <img src="../static/images/logo.png" alt="" style="width: 60%; height: auto; border-radius: 10px;">
         </div>
+        
         
 
 
       <div class="col-md-7" style="margin: 3px;">
-        <img src="../static/images/Banner_DB4.jpg" alt="" style="width: 700px; height: 465px; border-radius: 10px;">
+        <img src="../static/images/Banner_DB4.jpg" alt="" style="width: 80%; height: auto; border-radius: 10px;">
       </div>
 
       <div class="col-md-2">
         <div class="row" style="background-color: white; width: 500px; height: 50px; border-radius: 10px; margin-left: -10px;">
         
             <div class="row" style="display: flex; margin-top: 5px;">
-                <a href="#" style="text-decoration: none;"> <!--for chat system-->
+                <a href="/customer-support/{{ user_id }}" style="text-decoration: none; width: 50%; height: auto;"> <!--for chat system-->
                     <button style="background-color: transparent; border: none; cursor: pointer; text-align: left;">
                         <div class="col">
-                            <h6 style="font-family: 'Times New Roman', Times, serif; font-size: 12px; margin-left: -10px; font-weight: 600;">HELP CENTER</h6>
-                            <p style="font-size: small; color: gray; margin-left: -10px; margin-top: -10px;">Customer care</p>
+                            <h6 style="font-family: 'Times New Roman', Times, serif; font-size: 12px; margin-left: -10px; font-weight: 600;">CUSTOMER SUPPORT</h6>
+                            <p style="font-size: small; color: gray; margin-left: -10px; margin-top: -10px;">Help Center Discussions</p>
                         </div>
                     </button>
                 </a>
@@ -58,9 +34,7 @@
             </div>
 
             <div class="row" style="display: flex; margin-top: 5px;">
-                <div class="col">
-                    <img src="../static/images/cars.png" alt="" style="width: 500px; height: 365px; border-radius: 10px;">
-                </div>
+                
                 
             </div>
         </div>
@@ -78,28 +52,39 @@
 
         <div class="col" style="background-color: white;">
         
-            <img src="{{ item.product_picture }}" alt="" style="height: 202px; width: 180px; border-radius: 10px;">
+            <img src="{{ item.product_picture }}" alt="" style="height: auto; width: auto; border-radius: 10px;">
 
             <div class="row" style="margin-top: 5px;">
-                <h6 style="color: gray;">{{ item.product_name }}</h6>
+                <h6 style="color: gray;"><strong>{{ item.product_name }}</strong></h6>
             </div>
 
             <div class="row" style="margin-top: 10px;">
             
                 <div class="col">
 
-                    <h5 style="font-weight: 600; font-family: 'Times New Roman', Times, serif;">Ksh {{ item.current_price }}</h5>
-                    <strike><p style="color: gray;">Ksh {{ item.previous_price}}</p></strike>
+                    <h5 style="font-weight: 600; font-family: 'Times New Roman', Times, serif;">BDT {{ item.current_price }}</h5>
+                    <strike><p style="color: gray;">BDT {{ item.previous_price}}</p></strike>
                 </div>
 
                 <div class="col">
-                    <a href="/add-to-cart/{{ item.id }}">Add</a>
+                    <a href="/add-to-cart/{{ item.id }}">Add to Cart</a>
                 </div>
             
             </div>
 
+            <div classs="row" style="margin-top: 10px;">
+                <div class="col">
+                    <a href="/add-to-wishlist/{{ item.id }}">Add to Wishlist</a>
+                </div>
+                <div class="col">
+                    <a href="/product-details/{{ item.id }}">Details</a>
+                </div>
+
+            </div>
+
             <div class="row">
-                <p>{{ item.in_stock }} Items Left</p>
+                <strong><p style="color: red;">{{ item.in_stock }} in stock</p></strong>
+                
             </div>
         </div>
     

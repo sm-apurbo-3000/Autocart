@@ -17,7 +17,7 @@ def home():
         cart_items = []
         wished_items = []
 
-    return render_template('home.html', items=products, cart_items=cart_items, wished_items=wished_items)
+    return render_template('home.html', items=products, cart_items=cart_items, wished_items=wished_items, user_id = current_user.id if current_user.is_authenticated else 0)
 
 @views.route('/add-to-cart/<int:item_id>', methods = ['GET','POST'])
 @login_required
@@ -124,8 +124,10 @@ def plus_cart():
     if request.method == 'GET':
         cart_id = request.args.get('cart_id')
         cart_item = Cart.query.get(cart_id)
-        if cart_item.product.in_stock > 0:
-            cart_item.quantity += 1
+        if cart_item.quantity + 1 > cart_item.product.in_stock:
+            return jsonify({'error': 'Not enough stock available'}), 400
+        
+        cart_item.quantity += 1
         db.session.commit()
 
         cart = Cart.query.filter_by(customer_link=current_user.id).all()
@@ -135,7 +137,7 @@ def plus_cart():
             amount += (item.product.current_price * item.quantity)
 
         data = {'quantity': cart_item.quantity, 'amount': amount, 'total': amount + 10000}
-
+        
         return jsonify(data)
 
 
@@ -145,8 +147,10 @@ def minus_cart():
     if request.method == 'GET':
         cart_id = request.args.get('cart_id')
         cart_item = Cart.query.get(cart_id)
-        if cart_item.quantity > 1:
-            cart_item.quantity -= 1
+        if cart_item.quantity - 1 < 1:
+            return jsonify({'error': 'Negative quantity not allowed'}), 400
+        
+        cart_item.quantity -= 1
         db.session.commit()
 
         cart = Cart.query.filter_by(customer_link=current_user.id).all()
@@ -307,3 +311,24 @@ def product_details(item_id):
                }
        return render_template('product_details.html', data=data)
    return render_template('404.html')
+
+@views.route('/payment-success' , methods = ['GET' , 'POST'])
+@login_required
+def payment_success():
+    orders = Order.query.filter_by(customer_link = current_user.id).all()
+    flash('Payment Successful!')
+    return render_template('orders.html', orders = orders)
+
+@views.route('/payment-failure' , methods = ['GET', 'POST'])
+@login_required
+def payment_failure():
+    cart = Cart.query.filter_by(customer_link = current_user.id).all()
+    flash('Payment Failed!')
+    return render_template('cart.html', cart = cart)
+
+@views.route('/payment-cancel', methods = ['GET', 'POST'])
+@login_required
+def payment_cancel():
+    orders = Order.query.filter_by(customer_link = current_user.id).all()
+    flash('Payment Cancelled!')
+    return render_template('orders.html', orders = orders)

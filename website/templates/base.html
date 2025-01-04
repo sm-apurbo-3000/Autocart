@@ -23,7 +23,7 @@
      <nav class="navbar navbar-expand-lg" style="background-color: white;">
         <div class="container-fluid">
             <a class="navbar-brand" href="#" style="color: orange; font-size: 30px; margin-right: -2px;">
-                <i class="fa-brands fa-amazon"></i>
+                <i class="fab fa-amazon"></i>
             </a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,47 +49,63 @@
                   <input class="form-control me-2" name="search" type="search" placeholder="Search" aria-label="Search">
                   <button class="btn" type="submit">Search</button>
                 </form>
+
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                  <!--Cart with count-->
+                  <li class="nav-item mx-2" id="items">
+                      {% if cart_items | length < 1 %}
+                      <a class="nav-link text-grey" href="/cart"><span class="badge bg-success"></span> Cart
+                          <i class="fa-solid fa-cart-shopping"></i>
+                      </a>
+                      {% else %}
+                      <a class="nav-link text-grey" href="/cart"><span class="badge bg-success"></span> Cart
+                        <i class="bi bi-{{ cart_items | length }}-square-fill"></i>
+                      </a>
+                      {% endif %}
+                  
+                  </li>
+                  <!--Wishlist with count-->
+                  <li class="nav-item mx-2" id="items">
+                    {% if wished_items | length < 1 %}
+                    <a class="nav-link text-grey" href="/wishlist"><span class="badge bg-success"></span> WishList
+                      <i class="fa-solid fa-heart"></i>
+                    </a>
+                    {% else %}
+                    <a class="nav-link text-grey" href="/wishlist"><span class="badge bg-success"></span> Wishlist
+                      <i class="bi bi-{{ wished_items | length }}-square-fill"></i>
+                    </a>
+                    {% endif %}
+                  </li>
+  
+                  
+  
+                  <li class="nav-item dropdown mx-2">
+                      <a class="nav-link dropdown-toggle text-grey" href="#" role="button", id="profileDropdown" 
+                      data-bs-toggle="dropdown" aria-hidden="false">
+                        Account
+                      </a>
+                      <ul class="dropdown-menu" aria-labelledby="profileDropdown">
+  
+                          {% if current_user.is_authenticated %}
+                          <li><a class="dropdown-item" href="/profile/{{ current_user.id }}">Profile <i class="fa-solid fa-user"></i></a></li>
+                          <li><a class="dropdown-item" href="/orders">Orders <i class="fa-solid fa-truck-fast"></i></a></li>
+                          <li><a class="dropdown-item" href="/logout">Log Out <i class="fa-solid fa-right-from-bracket"></i></a></li>
+  
+                          {% else  %}
+                          <li><a class="dropdown-item" href="/login">Login <i class="fa-solid fa-right-to-bracket"></i></a></li>
+  
+                          {% endif %}
+                      
+                      </ul>
+                  
+                  </li>
+                
+              </ul>
               </div>
       
               
-              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-      
-                <li class="nav-item mx-2" id="items">
-                    <a class="nav-link text-grey" href="#"><span class="badge bg-success"></span> Cart
-                        <i class="fa-solid fa-cart-shopping"></i>
-                    </a>
-                
-                
-                </li>
-
-                <li class="nav-item mx-2" id="items">
-                    <a class="nav-link text-grey" href="#"><span class="badge bg-success"></span> WishList
-                      <i class="fa-solid fa-heart"></i>
-                    </a>
-                </li>
-
-                <li class="nav-item dropdown mx-2">
-                    <a class="nav-link dropdown-toggle text-grey" href="#" role="button", id="profileDropdown" 
-                    data-bs-toggle="dropdown" aria-hidden="false">
-                      Account
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="profileDropdown">
-
-                        {% if current_user.is_authenticated %}
-                        <li><a class="dropdown-item" href="/profile/{{ current_user.id }}">Profile <i class="fa-solid fa-user"></i></a></li>
-                        <li><a class="dropdown-item" href="#">Orders <i class="fa-solid fa-truck-fast"></i></a></li>
-                        <li><a class="dropdown-item" href="/logout">Log Out <i class="fa-solid fa-right-from-bracket"></i></a></li>
-
-                        {% else  %}
-                        <li><a class="dropdown-item" href="/login">Login <i class="fa-solid fa-right-to-bracket"></i></a></li>
-
-                        {% endif %}
-                    
-                    </ul>
-                
-                </li>
               
-            </ul>
         
         </div>
      
@@ -121,6 +137,7 @@
     <script src="{{ url_for( 'static', filename='js/owl.carousel.min.js') }}"></script>
     <script src="{{ url_for( 'static', filename='js/all.min.js') }}"></script>
     <script src="{{ url_for( 'static', filename='js/jquery.js') }}"></script>
+    <script src="{{ url_for( 'static', filename='js/myScript.js') }}"></script>
 
 </body>
 </html>

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %} Admin Page {% endblock %}
+
+{% block body %}
+
+<table class="table table-dark table-hover">
+    <thead>
+        <tr>
+            <th></th>
+            <th scope="col">Customers</th>
+            <th scope="col">Show Added Cars</th>
+            <th scope="col">Add New Car</th>
+            <th scope="col">View Orders</th>
+            <th scope="col">Customer Support</th>
+
+        </tr>
+
+    </thead> 
+    <tbody>
+        <tr>
+            <td></td>
+            <td><a href="/customers">Customers</a></td>
+            <td><a href="/show-added-cars">Show Added Cars</a></td>
+            <td><a href="/add-new-car">Add New Car</a></td>
+            <td><a href="/view-orders">View Orders</a></td>
+            <td><a href="/customer-support/{{ admin_id }}">Customer Support</a></td> <!--for chat system-->
+        </tr>
+    </tbody>
+</table>
+
+
+{% endblock %}
